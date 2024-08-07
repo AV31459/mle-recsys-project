@@ -170,3 +170,5 @@ env_recsys_start/
 
 # datasets
 data/
+# models
+models/

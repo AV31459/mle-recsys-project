@@ -32,3 +32,15 @@ def print_total_mem_usage(units='GB'):
         mem_usage /= (1024 ** 2)
 
     print(f'Process memory usage: {mem_usage:.2f} {units}')
+
+
+def print_csr_mem_usage(csr_matrix):
+    """Prints csr matrix memory usage in MB."""
+
+    mem_usage_mb = (
+        csr_matrix.data.nbytes
+        + csr_matrix.indices.nbytes
+        + csr_matrix.indptr.nbytes
+    ) / (1024 ** 2)
+
+    print(f'CSR mem usage: {mem_usage_mb:.2f} MB')
