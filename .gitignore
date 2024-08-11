@@ -174,3 +174,5 @@ data/*
 models/*
 
 temp.ipynb
+
+catboost_info
