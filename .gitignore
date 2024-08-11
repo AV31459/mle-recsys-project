@@ -169,6 +169,7 @@ cython_debug/
 env_recsys_start/
 
 # datasets
-data/
+data/*
 # models
-models/
+models/*
+temp.ipynb
