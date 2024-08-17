@@ -15,13 +15,13 @@ git clone https://github.com/yandex-praktikum/mle-project-sprint-4-v001.git
 Создать новое виртуальное окружение можно командой:
 
 ```
-python3 -m venv env_recsys_start
+python3 -m venv .venv
 ```
 
 После его инициализации следующей командой
 
 ```
-. env_recsys_start/bin/activate
+source .venv/bin/activate
 ```
 
 установите в него необходимые Python-пакеты следующей командой
@@ -57,7 +57,7 @@ jupyter lab --ip=0.0.0.0 --no-browser
 
 # Расчёт рекомендаций
 
-Код для выполнения первой части проекта находится в файле `recommendations.ipynb`. Изначально, это шаблон. Используйте его для выполнения первой части проекта.
+Код для выполнения первой части проекта находится в файле `recommendations.ipynb`.
 
 # Сервис рекомендаций
 
