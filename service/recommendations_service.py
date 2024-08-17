@@ -59,12 +59,18 @@ def healthcheck():
 def recommend(request: RecSysRequest):
     """Get recommendations."""
 
-    return RecSysResponse(recs=recsys_handler.get_recs(
+    logger.debug(f'Valid recs request received: {request}')
+
+    #  Передаем паремтры в хендлер и получаем рекомендации
+    response = RecSysResponse(recs=recsys_handler.get_recs(
         type=request.type,
         user_id=request.user_id,
         n_recs=request.n_recs,
         last_items=request.last_items
     ))
+    logger.debug(f'Sending back response: {response}')
+
+    return response
 
 
 logger.info('Recsys service module initialization completed.')

@@ -1,0 +1,33 @@
+[
+    {
+        "test_name": "Healthcheck status",
+        "uri": "/",
+        "method": "get",
+        "data": "",
+        "response_code": 200
+    },
+    {
+        "test_name": "Top-popular",
+        "uri": "/recs",
+        "method": "post",
+        "data": {
+            "type": "top_popular",
+            "user_id": 0
+          },
+        "response_code": 200,
+        "response_data": {
+            "recs": [
+              53404,
+              33311009,
+              178529,
+              35505245,
+              24692821,
+              795836,
+              6705392,
+              32947997,
+              37384,
+              45499814
+            ]
+          }
+    }
+]
