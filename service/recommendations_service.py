@@ -63,7 +63,6 @@ def recommend(request: RecSysRequest):
 
     #  Передаем паремтры в хендлер и получаем рекомендации
     response = RecSysResponse(recs=recsys_handler.get_recs(
-        type=request.type,
         user_id=request.user_id,
         n_recs=request.n_recs,
         last_items=request.last_items

@@ -1,0 +1,61 @@
+recsys_test: INFO: Starting the tests for RecSys service...
+recsys_test: INFO: Target service uri: http://127.0.0.1:8888
+recsys_test: INFO: Strict response check mode: True
+recsys_test: INFO: Test data loaded
+recsys_test: INFO: Starting tests...
+recsys_test: INFO: ----------------------------------------
+recsys_test: INFO: Test 1: "Healthcheck status (200)"
+recsys_test: INFO: >>> Request: uri="/", method="get", data=None
+recsys_test: INFO: <!> Expected: code=200, data=<any>
+recsys_test: INFO: <<< Response: code=200, data=Service appears to be up and running.
+recsys_test: INFO: Test 1 PASSED!
+recsys_test: INFO: ----------------------------------------
+recsys_test: INFO: Test 2: "Wrong JSON keys (422)"
+recsys_test: INFO: >>> Request: uri="/recs", method="post", data={'юзер_ид': 0, 'эн_рекс': 5}
+recsys_test: INFO: <!> Expected: code=422, data=<any>
+recsys_test: INFO: <<< Response: code=422, data={'detail': [{'type': 'missing', 'loc': ['body', 'user_id'], 'msg': 'Field required', 'input': {'юзер_ид': 0, 'эн_рекс': 5}, 'url': 'https://errors.pydantic.dev/2.8/v/missing'}]}
+recsys_test: INFO: Test 2 PASSED!
+recsys_test: INFO: ----------------------------------------
+recsys_test: INFO: Test 3: "Incorrect user_id (422)"
+recsys_test: INFO: >>> Request: uri="/recs", method="post", data={'user_id': -23456}
+recsys_test: INFO: <!> Expected: code=422, data=<any>
+recsys_test: INFO: <<< Response: code=422, data={'detail': [{'type': 'greater_than_equal', 'loc': ['body', 'user_id'], 'msg': 'Input should be greater than or equal to 0', 'input': -23456, 'ctx': {'ge': 0}, 'url': 'https://errors.pydantic.dev/2.8/v/greater_than_equal'}]}
+recsys_test: INFO: Test 3 PASSED!
+recsys_test: INFO: ----------------------------------------
+recsys_test: INFO: Test 4: "Incorrect n_recs (422)"
+recsys_test: INFO: >>> Request: uri="/recs", method="post", data={'user_id': 0, 'n_recs': -10}
+recsys_test: INFO: <!> Expected: code=422, data=<any>
+recsys_test: INFO: <<< Response: code=422, data={'detail': [{'type': 'greater_than', 'loc': ['body', 'n_recs'], 'msg': 'Input should be greater than 0', 'input': -10, 'ctx': {'gt': 0}, 'url': 'https://errors.pydantic.dev/2.8/v/greater_than'}]}
+recsys_test: INFO: Test 4 PASSED!
+recsys_test: INFO: ----------------------------------------
+recsys_test: INFO: Test 5: "Incorrect last_items (422)"
+recsys_test: INFO: >>> Request: uri="/recs", method="post", data={'user_id': 0, 'last_items': [1, 2, 4, -7, 10]}
+recsys_test: INFO: <!> Expected: code=422, data=<any>
+recsys_test: INFO: <<< Response: code=422, data={'detail': [{'type': 'greater_than_equal', 'loc': ['body', 'last_items', 3], 'msg': 'Input should be greater than or equal to 0', 'input': -7, 'ctx': {'ge': 0}, 'url': 'https://errors.pydantic.dev/2.8/v/greater_than_equal'}]}
+recsys_test: INFO: Test 5 PASSED!
+recsys_test: INFO: ----------------------------------------
+recsys_test: INFO: Test 6: "No personal recs (cold user), no last_items (200)"
+recsys_test: INFO: >>> Request: uri="/recs", method="post", data={'user_id': 0}
+recsys_test: INFO: <!> Expected: code=200, data={'recs': [53404, 33311009, 178529, 35505245, 24692821, 795836, 6705392, 32947997, 37384, 45499814]}
+recsys_test: INFO: <<< Response: code=200, data={'recs': [53404, 33311009, 178529, 35505245, 24692821, 795836, 6705392, 32947997, 37384, 45499814]}
+recsys_test: INFO: Test 6 PASSED!
+recsys_test: INFO: ----------------------------------------
+recsys_test: INFO: Test 7: "Cold user, no last_items, n_recs=5 (200)"
+recsys_test: INFO: >>> Request: uri="/recs", method="post", data={'user_id': 0, 'n_recs': 5}
+recsys_test: INFO: <!> Expected: code=200, data={'recs': [53404, 33311009, 178529, 35505245, 24692821]}
+recsys_test: INFO: <<< Response: code=200, data={'recs': [53404, 33311009, 178529, 35505245, 24692821]}
+recsys_test: INFO: Test 7 PASSED!
+recsys_test: INFO: ----------------------------------------
+recsys_test: INFO: Test 8: "Warm user, no last_items, n_recs=6 (200)"
+recsys_test: INFO: >>> Request: uri="/recs", method="post", data={'user_id': 3, 'n_recs': 6}
+recsys_test: INFO: <!> Expected: code=200, data={'recs': [80153541, 67538121, 68562711, 57921154, 66322065, 50821247]}
+recsys_test: INFO: <<< Response: code=200, data={'recs': [80153541, 67538121, 68562711, 57921154, 66322065, 50821247]}
+recsys_test: INFO: Test 8 PASSED!
+recsys_test: INFO: ----------------------------------------
+recsys_test: INFO: Test 9: "Warm user with last_items, n_recs=9 (200)"
+recsys_test: INFO: >>> Request: uri="/recs", method="post", data={'user_id': 3, 'n_recs': 9, 'last_items': [135, 3, 139, 26, 38]}
+recsys_test: INFO: <!> Expected: code=200, data={'recs': [141, 80153541, 4625976, 67538121, 801526, 68562711, 21888865, 57921154, 66322065]}
+recsys_test: INFO: <<< Response: code=200, data={'recs': [141, 80153541, 4625976, 67538121, 801526, 68562711, 21888865, 57921154, 66322065]}
+recsys_test: INFO: Test 9 PASSED!
+recsys_test: INFO: ----------------------------------------
+recsys_test: INFO: OK! ALL TESTS PASSED.

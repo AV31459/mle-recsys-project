@@ -176,3 +176,4 @@ models/*
 temp.ipynb
 
 catboost_info/
+!test_service.log

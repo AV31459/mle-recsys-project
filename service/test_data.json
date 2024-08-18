@@ -1,33 +1,102 @@
 [
-    {
-        "test_name": "Healthcheck status",
-        "uri": "/",
-        "method": "get",
-        "data": "",
-        "response_code": 200
+  {
+    "test_name": "Healthcheck status (200)",
+    "uri": "/",
+    "method": "get",
+    "data": null,
+    "response_code": 200
+  },
+  {
+    "test_name": "Wrong JSON keys (422)",
+    "uri": "/recs",
+    "method": "post",
+    "data": {
+      "юзер_ид": 0,
+      "эн_рекс": 5
     },
-    {
-        "test_name": "Top-popular",
-        "uri": "/recs",
-        "method": "post",
-        "data": {
-            "type": "top_popular",
-            "user_id": 0
-          },
-        "response_code": 200,
-        "response_data": {
-            "recs": [
-              53404,
-              33311009,
-              178529,
-              35505245,
-              24692821,
-              795836,
-              6705392,
-              32947997,
-              37384,
-              45499814
-            ]
-          }
+    "response_code": 422
+  },
+  {
+    "test_name": "Incorrect user_id (422)",
+    "uri": "/recs",
+    "method": "post",
+    "data": {
+      "user_id": -23456
+    },
+    "response_code": 422
+  },
+  {
+    "test_name": "Incorrect n_recs (422)",
+    "uri": "/recs",
+    "method": "post",
+    "data": {
+      "user_id": 0,
+      "n_recs": -10
+    },
+    "response_code": 422
+  },
+  {
+    "test_name": "Incorrect last_items (422)",
+    "uri": "/recs",
+    "method": "post",
+    "data": {
+      "user_id": 0,
+      "last_items": [1, 2, 4, -7, 10]
+    },
+    "response_code": 422
+  },
+  {
+    "test_name": "No personal recs (cold user), no last_items (200)",
+    "uri": "/recs",
+    "method": "post",
+    "data": {
+      "user_id": 0
+    },
+    "response_code": 200,
+    "response_data": {
+      "recs": [53404, 33311009, 178529, 35505245, 24692821, 795836, 6705392,
+               32947997, 37384, 45499814]
     }
+  },
+  {
+    "test_name": "Cold user, no last_items, n_recs=5 (200)",
+    "uri": "/recs",
+    "method": "post",
+    "data": {
+      "user_id": 0,
+      "n_recs": 5
+    },
+    "response_code": 200,
+    "response_data": {
+      "recs": [53404, 33311009, 178529, 35505245, 24692821]
+    }
+  },
+  {
+    "test_name": "Warm user, no last_items, n_recs=6 (200)",
+    "uri": "/recs",
+    "method": "post",
+    "data": {
+      "user_id": 3,
+      "n_recs": 6
+    },
+    "response_code": 200,
+    "response_data": {
+      "recs": [80153541, 67538121, 68562711, 57921154, 66322065, 50821247]
+    }
+  },
+  {
+    "test_name": "Warm user with last_items, n_recs=9 (200)",
+    "uri": "/recs",
+    "method": "post",
+    "data": {
+      "user_id": 3,
+      "n_recs": 9,
+      "last_items": [135, 3,  139, 26, 38]
+    },
+    "response_code": 200,
+    "response_data": {
+      "recs": [141, 80153541, 4625976, 67538121, 801526, 68562711, 21888865,
+               57921154, 66322065]
+    }
+  }
 ]

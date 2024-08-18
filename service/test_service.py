@@ -4,8 +4,15 @@ import os
 from dotenv import load_dotenv
 import json
 import requests
+import argparse
 
 load_dotenv('.env_service')
+
+# Парсим аргументы командной строки
+cli_parser = argparse.ArgumentParser()
+cli_parser.add_argument('--strict', action='store_true',
+                        help='Strict response check mode')
+strict_mode = cli_parser.parse_args().strict
 
 logger = logging.getLogger('recsys_test')
 log_handler = logging.StreamHandler(sys.stdout)
@@ -21,6 +28,7 @@ logger.info('Starting the tests for RecSys service...')
 service_uri = 'http://' + os.getenv('HOST') + ':' + os.getenv('PORT')
 
 logger.info(f'Target service uri: {service_uri}')
+logger.info(f'Strict response check mode: {strict_mode}')
 
 # Загружаем данные тестов из test_data.json
 with open('service/test_data.json', 'r') as f:
@@ -32,14 +40,14 @@ logger.info('-' * 40)
 
 errors = False
 
+# Прогоняем загруженные тесты
 for num, test in enumerate(test_data, 1):
-    logger.info(f'Test {num}: {test["test_name"]}')
-    logger.info(f'>>> Request: uri="{test["uri"]}", method="{test["method"]}", '
-                f'data={test["data"]}, ')
+    logger.info(f'Test {num}: "{test["test_name"]}"')
+    logger.info(f'>>> Request: uri="{test["uri"]}", '
+                f'method="{test["method"]}", '
+                f'data={test.get("data", "<empty>")}')
     logger.info(f'<!> Expected: code={test["response_code"]}, '
                 f'data={test.get("response_data", "<any>")}')
-
-    test_uri = service_uri + test["uri"]
 
     response = getattr(requests, test['method'])(
         url=(service_uri + test["uri"]),
@@ -52,18 +60,25 @@ for num, test in enumerate(test_data, 1):
                 f'data={response.json()}')
 
     if (
+        # Не совпадает response code
         response.status_code != test['response_code']
+        # или не соответствует response data
         or (
-                test.get('response_data')
-                and response.json() != test['response_data']
+            test.get('response_data')
+            and (
+                (strict_mode and response.json() != test['response_data'])
+                or (len(response.json()['recs']) != len(test['response_data']
+                                                        ['recs']))
             )
+        )
     ):
         errors = True
         logger.error(f'TEST {num} FAILED!')
         continue
-    logger.info('PASSED!')
+    logger.info(f'Test {num} PASSED!')
     logger.info('-' * 40)
 
 if errors:
     logger.error('TESTS FAILED!!!')
-logger.info('OK! ALL TESTS PASSED.')
+else:
+    logger.info('OK! ALL TESTS PASSED.')
