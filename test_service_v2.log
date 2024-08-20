@@ -1,0 +1,18 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.12, pytest-8.3.2, pluggy-1.5.0 -- /home/mle-user/mle_projects/mle-recsys-project/venv/bin/python
+cachedir: .pytest_cache
+rootdir: /home/mle-user/mle_projects/mle-recsys-project
+plugins: anyio-3.7.1
+collecting ... collected 9 items
+
+service/test_service_v2.py::test_unit[Healthcheck status (200)] PASSED   [ 11%]
+service/test_service_v2.py::test_unit[Wrong JSON keys (422)] PASSED      [ 22%]
+service/test_service_v2.py::test_unit[Incorrect user_id (422)] PASSED    [ 33%]
+service/test_service_v2.py::test_unit[Incorrect n_recs (422)] PASSED     [ 44%]
+service/test_service_v2.py::test_unit[Incorrect last_items (422)] PASSED [ 55%]
+service/test_service_v2.py::test_unit[No personal recs (cold user), no last_items (200)] PASSED [ 66%]
+service/test_service_v2.py::test_unit[Cold user, no last_items, n_recs=5 (200)] PASSED [ 77%]
+service/test_service_v2.py::test_unit[Warm user, no last_items, n_recs=6 (200)] PASSED [ 88%]
+service/test_service_v2.py::test_unit[Warm user with last_items, n_recs=9 (200)] PASSED [100%]
+
+============================== 9 passed in 1.28s ===============================
